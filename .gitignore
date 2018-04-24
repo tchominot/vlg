@@ -1,0 +1,11 @@
+*.o
+*~
+*.swp
+*.so
+*.a
+
+vlg
+
+obj/
+diam/
+data/
