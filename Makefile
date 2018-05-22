@@ -1,29 +1,34 @@
 CC=gcc
 CFLAGS=-std=c11 -Wall -Wextra -pedantic -I/usr/include/igraph -ligraph
 
-SRC_FILES=vlg.c
-
+SRC_FILES=vlg.c helpers.c
 OBJ_FILES=$(SRC_FILES:.c=.o)
 
-SRC=$(addprefix src/, $(SRC_FILES))
-OBJ=$(addprefix obj/, $(OBJ_FILES))
+SRC_DIR=src
+OBJ_DIR=obj
+
+SRC=$(addprefix $(SRC_DIR)/, $(SRC_FILES))
+OBJ=$(addprefix $(OBJ_DIR)/, $(OBJ_FILES))
+EXE=vlg
 
 all: vlg-opti
 
-vlg: $(OBJ)
+$(EXE): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $@
 
-$(OBJ):
-	mkdir -p obj
-	$(CC) $(CFLAGS) $(SRC) -c -o $(OBJ)
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
 
-vlg-opti: CFLAGS += -O3
-vlg-opti: vlg
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	$(COMPILE.c) $(OUTPUT_OPTION) $<
 
-vlg-debug: CFLAGS += -g -Og
-vlg-debug: vlg
+$(EXE)-opti: CFLAGS += -O3
+$(EXE)-opti: $(EXE)
+
+$(EXE)-debug: CFLAGS += -g -Og
+$(EXE)-debug: $(EXE)
 
 clean:
-	$(RM) $(OBJ) vlg
+	$(RM) $(OBJ) $(EXE)
 
-.PHONY: all clean vlg-debug
+.PHONY: all clean $(EXE)-debug
