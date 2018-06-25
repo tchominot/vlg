@@ -51,20 +51,18 @@ static int read_graph(FILE *in, igraph_t *out) {
   // skip node degrees lines
   char buf[READER_BUFSIZE];
   unsigned long i = 0;
-  size_t nr = 0;
-  size_t k = 0;
+  size_t nr = 0; // nb of characters put in the buffer by the last fread call
+  size_t k = 0;  // offset in the buffer
   while (i < nodes) {
     nr = fread(buf, 1, READER_BUFSIZE, in);
-    if (!nr)
-      break;
-    k = 0;
-    while (k < nr && i < nodes)
-      if (buf[k++] == '\n')
+    if (!nr) {
+      fprintf(stderr, "read_graph: unexpected EOF\n");
+      return IGRAPH_PARSEERROR;
+    }
+    for (k = 0; k < nr && i < nodes; k++) {
+      if (buf[k] == '\n')
         i += 1;
-  }
-  if (i < nodes) {
-    fprintf(stderr, "read_graph: unexpected EOF\n");
-    return IGRAPH_PARSEERROR;
+    }
   }
   fseek(in, - (nr - k), SEEK_CUR);
 

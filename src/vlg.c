@@ -8,8 +8,14 @@
 int main(int argc, char *argv[]) {
   if (argc != 2) {
     printf("USAGE: ./vlg FILE");
+    return 1;
   }
+
   igraph_t *g = load_graph(argv[1]);
+  if (!g) {
+    return 2;
+  }
+
   preprocess_graph(g);
   // compute diameter
   // compute center and radius using data from diameter computation
