@@ -1,8 +1,8 @@
 #ifndef PREPROCESS_H
 # define PREPROCESS_H
 
-#include <igraph.h>
+# include <igraph.h>
 
-void preprocess_graph(igraph_t *g);
+igraph_vector_t biggest_cluster_vids(igraph_t *g);
 
 #endif // PREPROCESS_H

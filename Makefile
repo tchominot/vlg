@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-std=c11 -Wall -Wextra -pedantic -I/usr/include/igraph -ligraph
 
-SRC_FILES=vlg.c graph_loader.c preprocess.c
+SRC_FILES=vlg.c graph_loader.c preprocess.c diameter.c graph_data.c
 OBJ_FILES=$(SRC_FILES:.c=.o)
 
 SRC_DIR=src
@@ -22,10 +22,10 @@ $(OBJ_DIR):
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(COMPILE.c) $(OUTPUT_OPTION) $<
 
-opti: CFLAGS += -O3
+opti: CFLAGS += -O3 -DNDEBUG
 opti: $(EXE)
 
-debug: CFLAGS += -g -Og
+debug: CFLAGS += -Og -g
 debug: $(EXE)
 
 clean:
