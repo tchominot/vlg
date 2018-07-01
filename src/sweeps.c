@@ -44,7 +44,7 @@ igraph_integer_t center_sweep(const igraph_t *g, struct graph_data *gd,
   return center;
 }
 
-igraph_integer_t double_sweep_radius(const igraph_t *g, struct graph_data *gd,
+igraph_integer_t radius_center_sweep(const igraph_t *g, struct graph_data *gd,
                                      igraph_integer_t start)
 {
   igraph_vector_t ecc_vids;
@@ -53,6 +53,13 @@ igraph_integer_t double_sweep_radius(const igraph_t *g, struct graph_data *gd,
   start = VECTOR(ecc_vids)[rand() % igraph_vector_size(&ecc_vids)];
   igraph_vector_destroy(&ecc_vids);
   return center_sweep(g, gd, start);
+}
+
+void center_radius_sweep(const igraph_t *g, struct graph_data *gd,
+                         igraph_integer_t start)
+{
+  start = center_sweep(g, gd, start);
+  sweep(g, gd, start, NULL, NULL, NULL);
 }
 
 void multiple_sweeps(const igraph_t *g, struct graph_data *gd,
