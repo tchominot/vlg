@@ -6,8 +6,9 @@
 struct graph_data {
   igraph_integer_t min_ecc;
   igraph_integer_t max_ecc;
-  igraph_vector_t diametral_points;
-  igraph_vector_t center_points;
+  igraph_vector_t diametral_vertices;
+  igraph_vector_t diametral_candidates;
+  igraph_vector_t center_vertices;
 };
 
 void init_graph_data(igraph_t *g, struct graph_data *gd);

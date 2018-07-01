@@ -5,7 +5,7 @@
 #include "graph_data.h"
 #include "graph_loader.h"
 #include "preprocess.h"
-#include "diameter.h"
+#include "sweeps.h"
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
   init_graph_data(g, &gd);
 
 
-  igraph_integer_t diam_v = approximate_diameter(g, &gd, start_vid, 3);
+  double_sweep_simple(g, &gd, start_vid);
   printf("%d\n", gd.max_ecc);
 /*igraph_integer_t cent_v = approximate_radius(g, &gd, diam_v);
   approximate_diameter(g, &gd, cent_v, 2);
