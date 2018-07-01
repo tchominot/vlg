@@ -1,6 +1,6 @@
 #include "preprocess.h"
 
-igraph_vector_t biggest_cluster_vids(igraph_t *g) {
+igraph_vector_t main_cluster_vids(igraph_t *g) {
   igraph_vector_t cluster_vids, csize, membership;
   igraph_vector_init(&cluster_vids, 0);
   igraph_vector_init(&csize, 0);

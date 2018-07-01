@@ -16,6 +16,7 @@ static igraph_bool_t handler(const igraph_t *g,
                              igraph_integer_t rank,
                              igraph_integer_t dist,
                              void *bsd);
+static void remove_all_occurences(igraph_vector_t *v, igraph_integer_t val);
 
 igraph_integer_t sweep(const igraph_t *g, struct graph_data *gd,
                        igraph_integer_t start, igraph_integer_t *out_end,
@@ -44,8 +45,7 @@ igraph_integer_t sweep(const igraph_t *g, struct graph_data *gd,
   if (gd->max_ecc >= old_max_ecc) {
     // Remove start from candidates and add it to known vertices with max ecc
     long int pos;
-    if (igraph_vector_binsearch(&gd->diametral_candidates, start, &pos))
-      igraph_vector_remove(&gd->diametral_candidates, pos);
+    remove_all_occurences(&gd->diametral_candidates, start);
     if (!igraph_vector_binsearch(&gd->diametral_vertices, start, &pos))
       igraph_vector_insert(&gd->diametral_vertices, pos, start);
   }
@@ -90,14 +90,9 @@ handler(const igraph_t *g, igraph_integer_t vid, igraph_integer_t pred,
   if (dist > data->gd->max_ecc) {
     data->gd->max_ecc = dist;
     igraph_vector_clear(&data->gd->diametral_candidates);
-    igraph_vector_push_back(&data->gd->diametral_candidates, vid);
   }
-  else if (dist == data->gd->max_ecc) {
-    long int pos;
-    if (!igraph_vector_binsearch(&data->gd->diametral_candidates, vid, &pos)
-        && !igraph_vector_binsearch2(&data->gd->diametral_vertices, vid)) {
-      igraph_vector_insert(&data->gd->diametral_candidates, pos, vid);
-    }
+  if (dist == data->gd->max_ecc) {
+    igraph_vector_push_back(&data->gd->diametral_candidates, vid);
   }
 
   if (succ != -1)
@@ -112,4 +107,15 @@ handler(const igraph_t *g, igraph_integer_t vid, igraph_integer_t pred,
     data->gd->max_ecc = dist;
   }
   return 0;
+}
+
+static void remove_all_occurences(igraph_vector_t *v, igraph_integer_t val) {
+  long int size = igraph_vector_size(v);
+  long int new_size = 0;
+  for (long int i = 0; i < size; i++) {
+    igraph_integer_t cur = igraph_vector_e(v, i);
+    if (cur != val)
+      igraph_vector_set(v, new_size++, cur);
+  }
+  igraph_vector_resize(v, new_size);
 }
