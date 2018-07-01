@@ -31,7 +31,7 @@ igraph_integer_t center_sweep(const igraph_t *g, struct graph_data *gd,
                               igraph_integer_t start)
 {
   igraph_vector_t parent;
-  igraph_vector_init(&parent, 0);
+  igraph_vector_init(&parent, igraph_vcount(g));
   igraph_integer_t center;
   igraph_integer_t ecc = sweep(g, gd, start, &center, NULL, &parent);
   if (ecc < gd->max_ecc) {

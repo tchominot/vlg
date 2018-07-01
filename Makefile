@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-std=c11 -Wall -Wextra -pedantic -I/usr/include/igraph -ligraph
 
-SRC_FILES=vlg.c graph_loader.c preprocess.c sweep-core.c sweeps.c graph_data.c
+SRC_FILES=vlg.c graph_data.c graph_loader.c preprocess.c strategy.c sweep-core.c sweeps.c vecutils.c
 OBJ_FILES=$(SRC_FILES:.c=.o)
 
 SRC_DIR=src

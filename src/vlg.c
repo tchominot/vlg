@@ -5,10 +5,20 @@
 #include "graph_data.h"
 #include "graph_loader.h"
 #include "preprocess.h"
-#include "sweeps.h"
+#include "strategy.h"
+#include "vecutils.h"
 
-#define PTASK(task) (printf("%s: ", task));
-#define PDONE (printf("Done\n"));
+#ifndef NDEBUG
+# define PSEP (fprintf(stderr, "\n"))
+# define PDONE (fprintf(stderr, "OK\n"))
+# define PSTRAT(st) (fprintf(stderr, "Starting strategy: %s:\n", st))
+# define PTASK(task) (fprintf(stderr, "%s: ", task))
+#else
+# define PSEP ((void)0)
+# define PDONE ((void)0)
+# define PSTRAT(st) ((void)0)
+# define PTASK(task) ((void)0)
+#endif
 
 static void print_results(struct graph_data *gd);
 
@@ -29,13 +39,13 @@ int main(int argc, char *argv[]) {
   igraph_vector_t vids = main_cluster_vids(g);
   PDONE;
 
-  igraph_integer_t start_vid = VECTOR(vids)[rand() % igraph_vector_size(&vids)];
+  igraph_integer_t start_vid = vecutils_pick_random(&vids);
 
   struct graph_data gd;
   init_graph_data(g, &gd);
 
-  PTASK("Performing initial double sweep");
-  double_sweep_simple(g, &gd, start_vid);
+  PSTRAT("classic");
+  strat_classic(g, &gd, start_vid);
   PDONE;
 
 /*igraph_integer_t cent_v = approximate_radius(g, &gd, diam_v);
@@ -52,8 +62,13 @@ int main(int argc, char *argv[]) {
 }
 
 static void print_results(struct graph_data *gd) {
-  printf("\nResults:\n");
-  printf("  Diameter: %d ~ %d\n", gd->max_ecc, 2 * gd->min_ecc);
-  printf("  Radius <= %d\n", gd->min_ecc);
-  // TODO: print center
+  PSEP;
+  printf("Diameter: %d ~ %d\n", gd->max_ecc, 2 * gd->min_ecc);
+  printf("Radius  : <= %d\n", gd->min_ecc);
+
+  printf("Center  :");
+  long int size = igraph_vector_size(&gd->center_vertices);
+  for (long int i = 0; i < size; i++)
+    printf(" %d", (int) VECTOR(gd->center_vertices)[i]);
+  printf("\n");
 }
