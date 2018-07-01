@@ -3,6 +3,12 @@
 #include "sweep-core.h"
 #include "sweeps.h"
 
+void single_sweep(const igraph_t *g, struct graph_data *gd,
+                  igraph_integer_t start)
+{
+  sweep(g, gd, start, NULL, NULL, NULL);
+}
+
 void double_sweep_simple(const igraph_t *g, struct graph_data *gd,
                          igraph_integer_t start)
 {

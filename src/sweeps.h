@@ -5,6 +5,13 @@
 # include "graph_data.h"
 
 /*
+** Performs a single sweep from the vertex "start" on the graph g.
+** The sweep updates the data in gd, see sweep-core.h for more details.
+*/
+void single_sweep(const igraph_t *g, struct graph_data *gd,
+                  igraph_integer_t start);
+
+/*
 ** Performs a double sweep from the vertex "start" on the graph g.
 ** The second sweeps starts from the first's last visited vertex.
 ** Each sweep updates the data in gd, see sweep-core.h for more details.
