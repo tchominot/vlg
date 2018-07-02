@@ -6,7 +6,7 @@
 struct graph_data {
   igraph_integer_t min_ecc;
   igraph_integer_t max_ecc;
-  igraph_vector_t diametral_vertices;
+  igraph_vector_t max_ecc_vids;
   igraph_vector_t diametral_candidates;
   igraph_vector_t center_vertices;
 };

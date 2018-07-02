@@ -2,7 +2,7 @@
 # define SWEEPS_H
 
 # include <igraph.h>
-# include "graph_data.h"
+# include "graph-data.h"
 
 /*
 ** Performs a single sweep from the vertex "start" on the graph g.
@@ -68,8 +68,8 @@ igraph_integer_t radius_center_sweep(const igraph_t *g, struct graph_data *gd,
 ** improves min_ecc.
 ** Each sweep updates the data in gd, see sweep-core.h for more details.
 */
-void center_radius_sweep(const igraph_t *g, struct graph_data *gd,
-                         igraph_integer_t start);
+igraph_integer_t center_radius_sweep(const igraph_t *g, struct graph_data *gd,
+                                     igraph_integer_t start);
 
 
 /*

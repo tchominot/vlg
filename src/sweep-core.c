@@ -37,8 +37,8 @@ igraph_integer_t sweep(const igraph_t *g, struct graph_data *gd,
              NULL, parent, NULL, NULL, NULL, handler, &bsd);
 
   // Update eccentricty bounds
-  if (bsd.dist > gd->min_ecc) {
-    igraph_vector_clear(&gd->diametral_vertices);
+  if (bsd.dist > gd->max_ecc) {
+    igraph_vector_clear(&gd->max_ecc_vids);
     gd->max_ecc = bsd.dist;
   }
   if (bsd.dist < gd->min_ecc) {
@@ -46,13 +46,13 @@ igraph_integer_t sweep(const igraph_t *g, struct graph_data *gd,
     gd->min_ecc = bsd.dist;
   }
 
-  // Update diametral_candidates and diametral_vertices as needed
+  // Update diametral_candidates and max_ecc_vids as needed
   if (bsd.dist == gd->max_ecc) {
     // Remove start from candidates and add it to known vertices with max ecc
     long int pos;
     vecutils_remove_all_occurences(&gd->diametral_candidates, start);
-    if (!igraph_vector_binsearch(&gd->diametral_vertices, start, &pos))
-      igraph_vector_insert(&gd->diametral_vertices, pos, start);
+    if (!igraph_vector_binsearch(&gd->max_ecc_vids, start, &pos))
+      igraph_vector_insert(&gd->max_ecc_vids, pos, start);
   }
 
   // Update center_vertices as needed
@@ -92,9 +92,11 @@ handler(const igraph_t *g, igraph_integer_t vid, igraph_integer_t pred,
   if (dist > data->gd->max_ecc) {
     data->gd->max_ecc = dist;
     igraph_vector_clear(&data->gd->diametral_candidates);
+    igraph_vector_clear(&data->gd->max_ecc_vids);
   }
   if (dist == data->gd->max_ecc) {
-    igraph_vector_push_back(&data->gd->diametral_candidates, vid);
+    if (!igraph_vector_binsearch2(&data->gd->max_ecc_vids, vid))
+      igraph_vector_push_back(&data->gd->diametral_candidates, vid);
   }
 
   if (succ == -1)

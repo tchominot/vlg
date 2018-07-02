@@ -2,7 +2,7 @@
 # define SWEEP_CORE_H
 
 # include <igraph.h>
-# include "graph_data.h"
+# include "graph-data.h"
 
 /*
 ** TODO: details

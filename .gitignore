@@ -5,6 +5,7 @@
 *.a
 
 vlg
+callgrind.*
 
 obj/
 diam/

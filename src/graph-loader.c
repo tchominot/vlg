@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "graph_loader.h"
+#include "graph-loader.h"
 
 #define READER_BUFSIZE 1024
 

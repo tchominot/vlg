@@ -1,8 +1,11 @@
+#include <assert.h>
 #include <stdlib.h>
 
 #include "vecutils.h"
 
-igraph_integer_t vecutils_pick_random(igraph_vector_t *v) {
+igraph_integer_t vecutils_pick_random(const igraph_vector_t *v) {
+  long int size = igraph_vector_size(v);
+  assert(size > 0);
   long int idx = rand() % igraph_vector_size(v);
   return igraph_vector_e(v, idx);
 }

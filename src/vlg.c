@@ -2,34 +2,42 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "graph_data.h"
-#include "graph_loader.h"
+#include "graph-data.h"
+#include "graph-loader.h"
 #include "preprocess.h"
 #include "strategy.h"
 #include "vecutils.h"
 
 #ifndef NDEBUG
-# define PSEP (fprintf(stderr, "\n"))
-# define PDONE (fprintf(stderr, "OK\n"))
-# define PSTRAT(st) (fprintf(stderr, "Starting strategy: %s:\n", st))
+# define PSEP        (fprintf(stderr, "\n"))
+# define PDONE       (fprintf(stderr, "OK\n"))
+# define PSWEEPS     (fprintf(stderr, "Sweeps:\n"))
 # define PTASK(task) (fprintf(stderr, "%s: ", task))
 #else
-# define PSEP ((void)0)
-# define PDONE ((void)0)
-# define PSTRAT(st) ((void)0)
+# define PSEP        ((void)0)
+# define PDONE       ((void)0)
+# define PSWEEPS     ((void)0)
 # define PTASK(task) ((void)0)
 #endif
 
 static void print_results(struct graph_data *gd);
+static void print_vector(const igraph_vector_t *v);
+static void print_usage();
 
 int main(int argc, char *argv[]) {
-  if (argc != 2) {
-    printf("USAGE: ./vlg GRAPH_FILE");
+  if (argc != 3) {
+    print_usage();
     return 1;
   }
 
+  enum strategy strat = parse_strat(argv[1]);
+  if (strat == STRAT_NONE) {
+    fprintf(stderr, "%s is not a valid strategy, defaulting to classic.", argv[1]);
+    strat = STRAT_CLASSIC;
+  }
+
   PTASK("Loading graph");
-  igraph_t *g = load_graph(argv[1]);
+  igraph_t *g = load_graph(argv[2]);
   if (!g) {
     return 2;
   }
@@ -44,13 +52,21 @@ int main(int argc, char *argv[]) {
   struct graph_data gd;
   init_graph_data(g, &gd);
 
-  PSTRAT("classic");
-  strat_classic(g, &gd, start_vid);
+  PSWEEPS;
+  switch (strat) {
+    case STRAT_CLASSIC:
+      strat_classic(g, &gd, start_vid);
+      break;
+    case STRAT_CENTER_CHAIN:
+      strat_center_chain(g, &gd, start_vid);
+      break;
+    case STRAT_BALANCED:
+      strat_balanced(g, &gd, start_vid);
+      break;
+    default:
+      return 3;
+  }
   PDONE;
-
-/*igraph_integer_t cent_v = approximate_radius(g, &gd, diam_v);
-  approximate_diameter(g, &gd, cent_v, 2);
-  fill_center_vertices(g, &gd, cent_v);*/
 
   print_results(&gd);
 
@@ -66,9 +82,29 @@ static void print_results(struct graph_data *gd) {
   printf("Diameter: %d ~ %d\n", gd->max_ecc, 2 * gd->min_ecc);
   printf("Radius  : <= %d\n", gd->min_ecc);
 
-  printf("Center  :");
-  long int size = igraph_vector_size(&gd->center_vertices);
-  for (long int i = 0; i < size; i++)
-    printf(" %d", (int) VECTOR(gd->center_vertices)[i]);
+  printf("Center  : ");
+  print_vector(&gd->center_vertices);
+
+  printf("\nDiametral vertices:\n");
+  printf("  Known maximum eccentricity vertices    : ");
+  print_vector(&gd->max_ecc_vids);
+  printf("  Number of diametral vertices candidates: %ld\n",
+      igraph_vector_size(&gd->diametral_candidates));
+}
+
+static void print_vector(const igraph_vector_t *v) {
+  long int size = igraph_vector_size(v);
+  if (size <= 0) {
+    printf("(empty)\n");
+    return;
+  }
+  printf("%ld", (long int) igraph_vector_e(v, 0));
+  for (long int i = 1; i < size; i++)
+    printf(", %ld", (long int) igraph_vector_e(v, i));
   printf("\n");
+}
+
+static void print_usage() {
+  fprintf(stderr, "USAGE: ./vlg STRATEGY GRAPH_FILE\n");
+  fprintf(stderr, "   - STRATEGY: classic | center_chain | balanced\n");
 }
