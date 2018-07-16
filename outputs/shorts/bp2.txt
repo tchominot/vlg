@@ -1,0 +1,3 @@
+Diameter: 9 ~ 12
+Radius  : <= 6
+Center  : 18632, 346974, 1432588

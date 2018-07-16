@@ -1,0 +1,17 @@
+This is an implementation for VLG Project 1 using igraph C.
+
+This project's goal is to compute approximations for the diameter, radius,
+center and diametral vertices of a very large sparse graph.
+
+Usage:
+  make
+  ./vlg STRATEGY GRAPH_FILE
+    where STRATEGY is one of these: classic, center_chain, balanced
+
+If you don't want to display the full logs:
+  make opti
+  ./vlg STRATEGY GRAPH_FILE
+
+Or you can also do (to not display the logs):
+  make
+  ./vlg STRATEGY GRAPH_FILE 2> /dev/null

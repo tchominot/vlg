@@ -1,0 +1,23 @@
+sh$ time ./vlg center_chain data/ip
+
+Loading graph: OK
+Finding the main cluster: OK
+Sweeps:
+  initial double sweep (random) from 2002926: OK
+  center sweep from 65818: OK
+  radius_center (double) sweep from 8: OK
+  radius_center (double) sweep from 8: OK
+  last (single) sweep for the radius from 770398: OK
+OK
+
+Diameter: 9 ~ 10
+Radius  : <= 5
+Center  : 8
+
+Diametral vertices:
+  Known maximum eccentricity vertices    : 65818, 154340, 772044
+  Number of diametral vertices candidates: 257
+
+real	0m33.457s
+user	0m30.878s
+sys	0m2.508s

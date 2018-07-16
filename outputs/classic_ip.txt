@@ -1,0 +1,21 @@
+sh$ time ./vlg classic data/ip
+
+Loading graph: OK
+Finding the main cluster: OK
+Sweeps:
+  multiple sweeps (3) from 2002926: OK
+  center_radius sweep from 175534: OK
+  center_radius sweep from 21673: OK
+OK
+
+Diameter: 9 ~ 10
+Radius  : <= 5
+Center  : 8
+
+Diametral vertices:
+  Known maximum eccentricity vertices    : 21673, 175534, 772689, 2093252
+  Number of diametral vertices candidates: 256
+
+real	0m31.302s
+user	0m28.819s
+sys	0m2.418s

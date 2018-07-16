@@ -1,0 +1,23 @@
+sh$ time ./vlg balanced data/inet
+
+Loading graph: OK
+Finding the main cluster: OK
+Sweeps:
+  double sweep (simple) from 1222967: OK
+  center_radius sweep from 1511903: OK
+  center_radius sweep from 1717718: OK
+  center_radius sweep from 1717718: OK
+  center_radius sweep from 1717718: OK
+OK
+
+Diameter: 31 ~ 34
+Radius  : <= 17
+Center  : 208406
+
+Diametral vertices:
+  Known maximum eccentricity vertices    : 1511903, 1717718
+  Number of diametral vertices candidates: 0
+
+real	0m35.516s
+user	0m34.297s
+sys	0m1.121s

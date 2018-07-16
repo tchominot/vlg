@@ -1,0 +1,23 @@
+sh$ time ./vlg center_chain data/p2p
+
+Loading graph: OK
+Finding the main cluster: OK
+Sweeps:
+  initial double sweep (random) from 1888114: OK
+  center sweep from 2060154: OK
+  radius_center (double) sweep from 4803962: OK
+  radius_center (double) sweep from 2345071: OK
+  last (single) sweep for the radius from 2306314: OK
+OK
+
+Diameter: 9 ~ 12
+Radius  : <= 6
+Center  : 2306314, 2345071, 4803962
+
+Diametral vertices:
+  Known maximum eccentricity vertices    : 2034294, 2060154
+  Number of diametral vertices candidates: 5
+
+real	6m16.942s
+user	5m54.508s
+sys	0m21.352s

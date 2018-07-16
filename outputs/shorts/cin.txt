@@ -1,0 +1,3 @@
+Diameter: 31 ~ 34
+Radius  : <= 17
+Center  : 208406
