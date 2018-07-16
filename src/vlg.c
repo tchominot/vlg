@@ -32,10 +32,12 @@ int main(int argc, char *argv[]) {
 
   enum strategy strat = parse_strat(argv[1]);
   if (strat == STRAT_NONE) {
-    fprintf(stderr, "%s is not a valid strategy, defaulting to classic.", argv[1]);
-    strat = STRAT_CLASSIC;
+    fprintf(stderr, "%s is not a valid strategy.\n", argv[1]);
+    print_usage();
+    return 1;
   }
 
+  PSEP;
   PTASK("Loading graph");
   igraph_t *g = load_graph(argv[2]);
   if (!g) {
@@ -47,10 +49,10 @@ int main(int argc, char *argv[]) {
   igraph_vector_t vids = main_cluster_vids(g);
   PDONE;
 
-  igraph_integer_t start_vid = vecutils_pick_random(&vids);
-
   struct graph_data gd;
   init_graph_data(g, &gd);
+
+  igraph_integer_t start_vid = vecutils_pick_random(&vids);
 
   PSWEEPS;
   switch (strat) {
@@ -68,6 +70,7 @@ int main(int argc, char *argv[]) {
   }
   PDONE;
 
+  vecutils_sort_unique(&gd.diametral_candidates);
   print_results(&gd);
 
   destroy_graph_data(&gd);

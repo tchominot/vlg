@@ -18,13 +18,3 @@ igraph_vector_t main_cluster_vids(igraph_t *g) {
   igraph_vector_destroy(&membership);
   return cluster_vids;
 }
-
-// Simplification du graphe a faire :
-// regarder tous les sommets de degré 1 connectés a un seul meme noeud et
-// en garder qu'un seul a chaque fois (redondant pour les calculs qu'on veut
-// faire sinon)
-// i.e
-// pour chaque noeud n
-// si n est de degré 1
-// et qu'il existe un noeud de degré 1 à distance 2 de n
-// alors supprimer n
